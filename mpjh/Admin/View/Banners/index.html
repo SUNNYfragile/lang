@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>添加banner</title>
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+	<a href="__CONTROLLER__/add" target="_blank">添加轮播图</a>
+	<br/><br/><br/>
+	<if condition="$banners">
+	轮播图id-轮播图名称-轮播图地址-轮播图顺序<br/><br/><br/>
+		<foreach name='banners' item='banner'>
+		<div class="b_{$banner.id}">
+			{$banner.id}--
+			{$banner.name}--
+			{$banner.picurl}--
+			{$banner.sort}--
+			<a href="__CONTROLLER__/add/id/{$banner.id}">修改</a>---
+			<a href="javascript:;" bannerid="{$banner.id}" id="del" onclick="del($(this))">删除</a><br/><br/><br/>
+		</div>
+		</foreach>
+	<else/>
+		nothing to do
+	</if>
+	<script type="text/javascript">
+		
+		function del(obj)
+		{
+			var id = obj.attr('bannerid');
+			
+			$.ajax({
+				url: '__CONTROLLER__/delete/id/{$banner.id}',
+				type: 'GET',
+				dataType:"json",
+				data: {id: id},
+				success:function(data)
+				{
+					//alert(data);
+					//var data = $.parseJSON('data');
+					if(data.code==200)
+					{
+
+						$(".b_"+data.id).remove();
+					}
+					else
+					{
+						alert('删除失败!!!');
+					}
+				}
+			});
+			
+		}
+	</script>
+</body>
+</html>
